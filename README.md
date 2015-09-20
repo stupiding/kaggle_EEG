@@ -1,6 +1,6 @@
 This project provides the solution of team daheimao for the Kaggle Grasp-and-Lift EEG Detection Competition. It is implemented using Python and mainly based on [Lasagne](http://lasagne.readthedocs.org/en/latest/). Many thanks to its authors.
 
-This introduction is written by daheimao.
+This introduction is written by @daheimao.
 
 #Overview
 Before going to our solution, I want to mention the contribution of my team mate @stupiding. We prepared and completed this competition together. But unfortunately we missed the team merging deadline, for we are both new to kaggle and not familiar with the rules.
@@ -78,7 +78,17 @@ The code is written in Python, and the main dependencies include Lasagne, Numpy,
 
 ##How to use the code
 1. Generate the eeg_train.npy and eeg_test.npy with read_data.py
-######################################################################################################
+2. Prepare the model files in the folder **models/**. Some models have been put into this folder. The name of the model file follows certain rules. For example, the model *len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py* means:
+ 1. len3584: the input has a length of 3584
+ 2. resize3: the resizing range (data augmentation) is 0.7 to 1.3
+ 3. bs: bootstrap is used
+ 4. c1r4p5: the model has 1 convolutional layer, 4 RCLs, and 5 pooling layers
+ 5. f9: the size of recurrent filters is 1×9
+ 6. n256: 256 filters are used for convolutional layer and RCLs
+ 7. r35: positive samples have a ratio of 0.35 over all inputs
+ 8. v67: this model uses series 0-5 for training, and 6, 7 for validation.
+3. Train the models using *train_net.py* with the command below (take **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** for example): THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py len3584_resize3_bs_c1r4p5_f9n256r35p1_v67
+4. 
 To use this code, you should do the following:
 1. Install Lasagne
 
@@ -103,4 +113,6 @@ To combine diffent models and get the submition files:
    b. per_events_ffs.py
    c. combine_test.py
    d. submit.py
-To summarize, this competition is exciting although we made some mistakes. We want to give our thanks to the organizers and all the other teams!
+
+#Acknowledgements
+To summarize, this competition is very exciting although we made some mistakes. We want to give thanks to the organizers and all the other teams!
