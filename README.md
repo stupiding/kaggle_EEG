@@ -91,7 +91,7 @@ The code is written in Python, and the main dependencies include Lasagne, Numpy,
  8. **v67**: this model uses series 0-5 for training, and 6, 7 for validation.
 
 3. Train the models using **train_net.py** with the command below:    
-**THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py len3584_resize3_bs_c1r4p5_f9n256r35p1_v67**
+**THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py name_of_your_model**
 
 4. Over the validation results, use GFS to select a subset of models with the following steps:
  1. change into folder **model_combine/**
