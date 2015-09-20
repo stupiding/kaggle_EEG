@@ -77,9 +77,12 @@ For each time t, only the historical data is used as input. Zeros are padded in 
 The code is written in Python, and the main dependencies include Lasagne, Numpy, Sklearn, Scipy and Skimage. Each model is run on a single Titan black GPU. Note that the code is **GPU-only** for the use of CUDNN.
 
 ##How to use the code
+
 1. Generate the eeg_train.npy and eeg_test.npy with read_data.py
+ 
 2. Prepare the model files in the folder **models/**. Some models have been put into this folder. The name of the model file follows certain rules. For example, the model **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** means:
  1. **len3584**: the input has a length of 3584
+
  2. **resize3**: the resizing range (data augmentation) is 0.7 to 1.3
  3. **bs**: bootstrap is used
  4. **c1r4p5**: the model has 1 convolutional layer, 4 RCLs, and 5 pooling layers
@@ -87,27 +90,13 @@ The code is written in Python, and the main dependencies include Lasagne, Numpy,
  6. **n256**: 256 filters are used for convolutional layer and RCLs
  7. **r35**: positive samples have a ratio of 0.35 over all inputs
  8. **v67**: this model uses series 0-5 for training, and 6, 7 for validation.
+
 3. Train the models using *train_net.py* with the command below (take **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** for example):
 
 **THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py len3584_resize3_bs_c1r4p5_f9n256r35p1_v67**
+
 4. 
-To use this code, you should do the following:
-1. Install Lasagne
 
-2. Generate the eeg_train.npy and eeg_test.npy with read_data.py
-
-3. Write your own model file in the folder "models/" with Lasagne grammar like the example models in there, e.g. 
-   resize3_c1r4p5_f9n128r35p1_v67.py, len2560p1_resize3_bs_c1r4p5_f9n128r35p1_v67.py and 
-   len4096_downsample4_resize3_bs_c7p7_f9n128_r35p1_v67.py
-
-4. Start to train your model with the command below (take the resize3_c1r4p5_f9n128r35p1_v67 model for example):
-   THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py resize3_c1r4p5_f9n128r35p1_v67
-     # Note: this is for GPU-available device only
-     # For details of model parameters, go to models/resize3_c1r4p5_f9n128r35p1_v67.py
-
-
-
-######################################################################################################
 To combine diffent models and get the submition files:
 1. Change the python files in "model_combine/" according to your own environment
 2. Execute the following python files in order:
