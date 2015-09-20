@@ -18,10 +18,11 @@ More detailes can be found in the **Single model** and **Model selection** secti
 #Single model
 ##RCNN
 The key module of a RCNN is the recurrent convolutional layer (RCL), which can be seen as a specific form of RNN. A generic form of RNN is:
-𝐱(𝑡)=𝝈(𝐖^𝑖𝑛 𝐮(𝑡)+𝐖^𝑟𝑒𝑐 𝐱(𝑡−1))+𝐛)
-In the RCL, the feed-forward and recurrent computation both take the form of convolution.
-𝑥_𝑖𝑗𝑘 (𝑡)=𝝈((𝐰_𝑘^𝑖𝑛 )^T 𝐮^((𝑖,𝑗)) (𝑡)+(𝐰_𝑘^𝑟𝑒𝑐 )^T 𝐱^((𝑖,𝑗)) (𝑡−1)+𝑏_𝑘 )
-During training or test phase, the RCL is unfolded through discrete time steps into a feed-forward subnetwork. The number of time steps (or recurrent iterations) is pre-fixed as a hyper-parameter. A subnetwork with 3 iterations is shown in the following figure.
+![rnn_equation](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rnn.png)
+In the RCL, the feed-forward and recurrent computation both take the form of convolution:
+![rcl_equation](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rcl.png)
+During training or test phase, the RCL is unfolded through discrete time steps into a feed-forward subnetwork. The number of time steps (or recurrent iterations) is pre-fixed as a hyper-parameter. A subnetwork with 3 iterations is shown in the following figure:
+![rcl_unfolding](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rcl_unfolding.png)
 
 RCL is a natural integration of RNN and CNN. Through recurrent iterations, arbitrarily deep subnetwork can be obtained while the number of free paramters is fixed. Furthermore, each unfolded RCL has several paths of different depths from input to output. The combination of these paths make it less prone to over-fitting.
 
@@ -61,7 +62,7 @@ Initially, the selected subset is empty. In the first trial of GFS, the model wi
 
 GFS works well and its result keeps good consistency with the LB score. Unfortunately, this consistency is destroyed by a mistake. At first, we use fixed cv splits for all models. When there are three days before the deadline, we found some models are wrongly trained and decide to run a set of new models. To increase the variation of the new models,random cv splits are used for the new models. After this change, the LB scores always decrease with more new models. We did not found the answer until the last submission is made. By using random cv split, some models which do not complement each other may become “complementary” because they are trained by different splits, which means different training data.
 
-The six subsets of the final submission contains 36 models total, and achieves 0.98049/0.98029 public/private LB scores.
+The six subsets of the final submission contains 36 models in total, and achieves 0.98049/0.98029 public/private LB scores.
 
 # No future data
 For each time t, only the historical data is used as input. Zeros are padded in the left when the data has not enough length. Because no filtering pro-processing is used, it is easy for our models to statisfy the rule of no future data.
