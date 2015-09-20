@@ -1,4 +1,4 @@
-##This project provides the solution of team daheimao for the Kaggle Grasp-and-Lift EEG Detection Competition. It is implemented using Python and mainly based on [Lasagne](http://lasagne.readthedocs.org/en/latest/). Many thanks to its authors.
+This project provides the solution of team daheimao for the Kaggle Grasp-and-Lift EEG Detection Competition. It is implemented using Python and mainly based on [Lasagne](http://lasagne.readthedocs.org/en/latest/). Many thanks to its authors.
 
 This introduction is written by daheimao.
 
@@ -15,6 +15,7 @@ More detailes can be found in Single model and Model selection sections. The sel
 #Single model
 
 The structure of a typical RCNN is given below:
+------------------------------
 |Layer type|Size|Output shape|
 ------------------------------
 Convolutional                 128 1×9 filters	                    (64, 128, 1, 3584)
