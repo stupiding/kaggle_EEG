@@ -91,8 +91,7 @@ The code is written in Python, and the main dependencies include Lasagne, Numpy,
  7. **r35**: positive samples have a ratio of 0.35 over all inputs
  8. **v67**: this model uses series 0-5 for training, and 6, 7 for validation.
 
-3. Train the models using *train_net.py* with the command below (take **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** for example):
-
+3. Train the models using *train_net.py* with the command below:
 **THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py len3584_resize3_bs_c1r4p5_f9n256r35p1_v67**
 
 4. 
