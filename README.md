@@ -11,11 +11,12 @@ The pipeline of our solution is simple:
 
 1. A set of candidate models (mostly RCNN) are trained in a 4-fold cross validation (CV) manner over the training set.
 
-2. Greed forward selection (GFS) is applied to the candidate model set, and some models are selected for combination and submission.
+2. Greedy forward selection (GFS) is applied to the candidate model set, and some models are selected for combination and submission.
 
 More detailes can be found in Single model and Model selection sections. The selected models are re-train over all the training data, and their predictions over the test data are averaged and submitted. Note that for each model, its predictions of all training data can be obtained by concatenating the validation results of all 4 CV splits.
 
 #Single model
+The structure of a typical RCNN is given below:
 | Layer type      | Size                                                        | Output shape       |
 | --------------- |:-----------------------------------------------------------:| ------------------ |
 | Convolutional   | 128 1×9 filters                                             | (64, 128, 1, 3584) |
@@ -28,42 +29,7 @@ More detailes can be found in Single model and Model selection sections. The sel
 | Max pooling     | Pool size 4, stride 4                                       | (64, 128, 1, 14)   |
 | RCL             | 128 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 128, 1, 14)   |
 | Max pooling     | Pool size 2, stride 2                                       | (64, 128, 1, 7)    |
-| Fully connected | Pool size 2, stride 2                                       | (64, 128, 1, 7)    |
-The structure of a typical RCNN is given below:
-------------------------------
-|Layer type|Size|Output shape|
-------------------------------
-Convolutional|128 1×9 filters|(64, 128, 1, 3584)|
--------------------------------------------------
-
-Max pooling                   Pool size 4, stride 4	              (64, 128, 1, 896)
-
-RCL                           Feed-forward 128 1×1 filters,         (64, 128, 1, 896)
-                              Recurrent 128 1×9 filters,
-                              3 iterations
-                              
-Max pooling	                  Pool size 4, stride 4	              (64, 128, 1, 448)
-
-RCL                           Feed-forward 128 1×1 filters,         (64, 128, 1, 448)
-                              Recurrent 128 1×9 filters,
-                              3 iterations
-                              
-Max pooling	                  Pool size 4, stride 4
-(64, 128, 1, 112)
-RCL                           Feed-forward 128 1×1 filters,         (64, 128, 1, 112)
-                              Recurrent 128 1×9 filters,
-                              3 iterations
-                              
-Max pooling	                  Pool size 4, stride 4
-(64, 128, 1, 28)
-RCL                           Feed-forward 128 1×1 filters,         (64, 128, 1, 28)
-                              Recurrent 128 1×9 filters,
-                              3 iterations
-                              
-Max pooling	                  Pool size 4, stride 4	              (64, 128, 1, 7)
-
-Fully connected	            896×6	                                (64, 6)
-
+| Fully connected | 896×6                                                       | (64, 6)            |
 The net is composed of one convolutional layer (for speed) and four RCLs, and all these layers are followed by a max pooling layer with size 4 and stride 4. Relu or leaky Relu is used in the convolutional layer and RCLs, and sigmoid is used in the fully connected layer for classification.
 
 Weight decay, dropout and batch normalization are used to regularize the model. For some models, data augmentation is also used: the input is randomly resized. But this operation seems to bring only slight improvement.
