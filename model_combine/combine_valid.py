@@ -4,9 +4,8 @@ from metrics import AUC
 import sys
 import os
 
-results_dir = './all_results/'  # This is the path where all test_valid results stored
-results = ['resize3_c1r4p5_f9n128r35p1', 'len2560p1_resize3_bs_c1r4p5_f9n128r35p1', 
-           'len4096_downsample4_resize3_bs_c7p7_f9n128_r35p1',
+results_dir = './all_valid_results/'  # This is the path where all test_valid results stored
+results = [ 
           ]  # This is the list of models that have been trained
 
 combine_stride = 1
