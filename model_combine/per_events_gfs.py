@@ -45,4 +45,4 @@ for i in np.arange(num_results):
     et = time.time()
     print "elapsed time is %f seconds, auc is: " % (et - st)
     print auc[i]
-    np.save(str(num_results) + '_per_event_ffs.npy', [auc, selected_idcs, selected_features])
+    np.save(str(num_results) + '_per_event_gfs.npy', [auc, selected_idcs, selected_features])

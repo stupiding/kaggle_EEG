@@ -3,7 +3,7 @@ import sys
 import os
 import time
 
-results_dir = '/home/liangming/kaggle/EEG/new_results'
+results_dir = './all_results'
 if len(sys.argv) != 2:
     sys.exit('Usage: combine_test.py <ff_result_file>')
 
