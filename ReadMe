@@ -15,6 +15,14 @@ More detailes can be found in Single model and Model selection sections. The sel
 Single model
 
 The structure of a typical RCNN is given below:
+--------------------------------------------------
+| No | Sadly        | There is none              |
+--------------------------------------------------
+| Except this, which is a poor alternative       |
+--------------------------------------------------
+| There really      | should be one              |
+--------------------------------------------------
+
 ------------------------------
 |Layer type|Size|Output shape|
 ------------------------------
