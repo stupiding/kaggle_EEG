@@ -13,6 +13,12 @@ The pipeline of our solution is simple:
 More detailes can be found in Single model and Model selection sections. The selected models are re-train over all the training data, and their predictions over the test data are averaged and submitted. Note that for each model, its predictions of all training data can be obtained by concatenating the validation results of all 4 CV splits.
 
 #Single model
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
 The structure of a typical RCNN is given below:
 ------------------------------
 |Layer type|Size|Output shape|
