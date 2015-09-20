@@ -18,10 +18,15 @@ More detailes can be found in the **Single model** and **Model selection** secti
 #Single model
 ##RCNN
 The key module of a RCNN is the recurrent convolutional layer (RCL), which can be seen as a specific form of RNN. A generic form of RNN is:
+
 ![rnn_equation](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rnn.png)
+
 In the RCL, the feed-forward and recurrent computation both take the form of convolution:
+
 ![rcl_equation](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rcl.png)
+
 During training or test phase, the RCL is unfolded through discrete time steps into a feed-forward subnetwork. The number of time steps (or recurrent iterations) is pre-fixed as a hyper-parameter. A subnetwork with 3 iterations is shown in the following figure:
+
 ![rcl_unfolding](https://github.com/stupiding/kaggle_EEG/blob/master/image_folder/rcl_unfolding.png)
 
 RCL is a natural integration of RNN and CNN. Through recurrent iterations, arbitrarily deep subnetwork can be obtained while the number of free paramters is fixed. Furthermore, each unfolded RCL has several paths of different depths from input to output. The combination of these paths make it less prone to over-fitting.
