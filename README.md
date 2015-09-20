@@ -70,7 +70,7 @@ GFS works well and its result keeps good consistency with the LB score. Unfortun
 The six subsets of the final submission contains 36 models in total, and achieves 0.98049/0.98029 public/private LB scores.
 
 # No future data
-For each time t, only the historical data is used as input. Zeros are padded in the left when the data has not enough length. Because no filtering pro-processing is used, it is easy for our models to statisfy the rule of no future data.
+For each time t, only the historical data is used as input. Zeros are padded in the left when the data has not enough length. Because no filtering pre-processing is used, it is easy for our models to statisfy the rule of no future data.
 
 #Code
 ##Code overview
