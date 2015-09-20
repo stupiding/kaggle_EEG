@@ -8,8 +8,11 @@ Before going to our solution, I want to mention the contribution of my team mate
 I am a Ph.D student majored in neural networks and computer vision. My intention of participating in this competition is to evaluate the performance of recurrent convolutional neural network (RCNN) in processing time series data. RCNN is firstly proposed by I for [image classification](http://www.xlhu.cn/papers/Liang15-cvpr.pdf), and then used for scene labeling (will appear in NIPS 2015 soon). In both of these two tasks the data is static image, and RCNN performs well. It turns out that RCNN also performs well for EEG data. Without any domain knowledge related modification, our best single model achieves 0.97652/0.97661 public/private LB scores. 
 
 The pipeline of our solution is simple:
+
 1. A set of candidate models (mostly RCNN) are trained in a 4-fold cross validation (CV) manner over the training set.
+
 2. Greed forward selection (GFS) is applied to the candidate model set, and some models are selected for combination and submission.
+
 More detailes can be found in Single model and Model selection sections. The selected models are re-train over all the training data, and their predictions over the test data are averaged and submitted. Note that for each model, its predictions of all training data can be obtained by concatenating the validation results of all 4 CV splits.
 
 #Single model
