@@ -68,7 +68,7 @@ momentum = 0.9
 wc = 0.001
 display_freq = 10
 valid_freq = 20
-bs_freq = 20
+bs_freq = 20000
 save_freq = 20
 
 def lr_schedule(chunk_idx):
@@ -112,7 +112,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn1', nn.layers.get_output_shape(bn1)
 
-    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 2), stride = (1, 2))
+    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 4), stride = (1, 4))
     print 'pool1', nn.layers.get_output_shape(pool1)
 
     drop1 = nn.layers.DropoutLayer(incoming = pool1, p = p1)
@@ -277,7 +277,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn4c', nn.layers.get_output_shape(bn4c)
 
-    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 4), stride = (1, 4))
+    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 2), stride = (1, 2))
     print 'pool4', nn.layers.get_output_shape(pool4)
 
     drop4 = nn.layers.DropoutLayer(incoming = pool4, p = p4)

@@ -25,6 +25,10 @@ train_data_params = {'section': 'train',
                      'chunk_size': 4096,
                      'num_chunks': 400,
                      'pos_ratio': 0.35,
+                     'bootstrap': True,
+                     'neg_pool_size': 81920,
+                     'hard_ratio': 1,
+                     'easy_mode': 'all',
                      'resize': [0.7, 1.3],
                      }
 
@@ -54,7 +58,7 @@ test_data_params = {'section': 'test',
                     'length': 3072,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [3072],
+                    'test_lens': [2458, 3072, 3686],
                     'test_valid': True,
                     }
 
@@ -64,7 +68,7 @@ momentum = 0.9
 wc = 0.001
 display_freq = 10
 valid_freq = 20
-bs_freq = 20000
+bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):

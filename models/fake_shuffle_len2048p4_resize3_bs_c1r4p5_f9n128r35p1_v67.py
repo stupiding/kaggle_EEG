@@ -11,19 +11,20 @@ rs = T.shared_randomstreams.RandomStreams()
 rs.seed(int(time.time()))
 
 data_path = 'eeg_train.npy'
-train_series = [0, 1, 2, 3, 4, 5]
-valid_series = [6, 7]
+train_series = [4, 3, 2, 6, 1, 0]
+valid_series = [5, 7]
 test_series = [0, 1, 2, 3, 4, 5]
 events = [0, 1, 2, 3, 4, 5]
 num_events = len(events)
+valid_first = True
 
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2560,
+                     'length': 2048,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
-                     'num_chunks': 400,
+                     'num_chunks': 280,
                      'pos_ratio': 0.35,
                      'bootstrap': True,
                      'neg_pool_size': 81920,
@@ -35,7 +36,7 @@ train_data_params = {'section': 'train',
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2560,
+                     'length': 2048,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
@@ -45,20 +46,31 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 2560,
+                  'length': 2048,
                   'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
                   'neg_interval': 100,
                   }
 
+test_valid_params = {'section': 'valid',
+                    'chunk_gen_fun': 'test_valid_chunk_gen_fun',
+                    'channels': 32,
+                    'length': 2048,
+                    'preprocess': 'per_sample_mean',
+                    'chunk_size': 4096,
+                    'test_lens': [2048],
+                    'interval': 10, 
+                    }
+
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 2560,
+                    'length': 2048,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [2560],
+                    'test_lens': [2048],
+                    'interval': 10, 
                     'test_valid': True,
                     }
 
@@ -66,18 +78,18 @@ test_data_params = {'section': 'test',
 batch_size = 64
 momentum = 0.9
 wc = 0.001
-display_freq = 10
+display_freq = 20
 valid_freq = 20
 bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):
     base = 0.1
-    if chunk_idx < 200:
+    if chunk_idx < 160:
         return base
-    elif chunk_idx < 320:
+    elif chunk_idx < 240:
         return 0.1 * base
-    elif chunk_idx < 390:
+    elif chunk_idx < 280:
         return 0.01 * base
     else:
         return 0.001 * base
@@ -112,7 +124,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn1', nn.layers.get_output_shape(bn1)
 
-    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 2), stride = (1, 2))
+    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 4), stride = (1, 4))
     print 'pool1', nn.layers.get_output_shape(pool1)
 
     drop1 = nn.layers.DropoutLayer(incoming = pool1, p = p1)
@@ -277,7 +289,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn4c', nn.layers.get_output_shape(bn4c)
 
-    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 4), stride = (1, 4))
+    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 2), stride = (1, 2))
     print 'pool4', nn.layers.get_output_shape(pool4)
 
     drop4 = nn.layers.DropoutLayer(incoming = pool4, p = p4)

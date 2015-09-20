@@ -20,7 +20,7 @@ num_events = len(events)
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2560,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'num_chunks': 400,
@@ -35,7 +35,7 @@ train_data_params = {'section': 'train',
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2560,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
@@ -45,7 +45,7 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 2560,
+                  'length': 3584,
                   'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
@@ -55,10 +55,10 @@ bs_data_params = {'section': 'bootstrap',
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 2560,
+                    'length': 3584,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [2560],
+                    'test_lens': [3584],
                     'test_valid': True,
                     }
 
@@ -102,7 +102,7 @@ input_dims = (batch_size,
 def build_model():
     l_in = nn.layers.InputLayer(input_dims)
 
-    conv1 = Conv2DLayer(incoming = l_in, num_filters = 128, filter_size = (1, 9),
+    conv1 = Conv2DLayer(incoming = l_in, num_filters = 64, filter_size = (1, 9),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -112,13 +112,13 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn1', nn.layers.get_output_shape(bn1)
 
-    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 2), stride = (1, 2))
+    pool1 = Pool2DLayer(incoming = bn1, pool_size = (1, 4), stride = (1, 4))
     print 'pool1', nn.layers.get_output_shape(pool1)
 
     drop1 = nn.layers.DropoutLayer(incoming = pool1, p = p1)
     print 'drop1', nn.layers.get_output_shape(drop1)
 
-    conv2 = Conv2DLayer(incoming = drop1, num_filters = 128, filter_size = (1, 1),
+    conv2 = Conv2DLayer(incoming = drop1, num_filters = 64, filter_size = (1, 1),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -128,7 +128,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn2', nn.layers.get_output_shape(bn2)
 
-    conv2a = Conv2DLayer(incoming = bn2, num_filters = 128, filter_size = (1, 9),
+    conv2a = Conv2DLayer(incoming = bn2, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = nn.init.Normal(std = std), b = None,
                          nonlinearity = None)
@@ -141,7 +141,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn2a', nn.layers.get_output_shape(bn2a)
 
-    conv2b = Conv2DLayer(incoming = bn2a, num_filters = 128, filter_size = (1, 9),
+    conv2b = Conv2DLayer(incoming = bn2a, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv2a.W, b = None,
                          nonlinearity = None)
@@ -154,7 +154,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn2b', nn.layers.get_output_shape(bn2b)
 
-    conv2c = Conv2DLayer(incoming = bn2b, num_filters = 128, filter_size = (1, 9),
+    conv2c = Conv2DLayer(incoming = bn2b, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv2a.W, b = None,
                          nonlinearity = None)
@@ -173,7 +173,7 @@ def build_model():
     drop2 = nn.layers.DropoutLayer(incoming = pool2, p = p2)
     print 'drop2', nn.layers.get_output_shape(drop2)
 
-    conv3 = Conv2DLayer(incoming = drop2, num_filters = 128, filter_size = (1, 1),
+    conv3 = Conv2DLayer(incoming = drop2, num_filters = 64, filter_size = (1, 1),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -183,7 +183,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn3', nn.layers.get_output_shape(bn3)
 
-    conv3a = Conv2DLayer(incoming = bn3, num_filters = 128, filter_size = (1, 9),
+    conv3a = Conv2DLayer(incoming = bn3, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = nn.init.Normal(std = std), b = None,
                          nonlinearity = None)
@@ -196,7 +196,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn3a', nn.layers.get_output_shape(bn3a)
 
-    conv3b = Conv2DLayer(incoming = bn3a, num_filters = 128, filter_size = (1, 9),
+    conv3b = Conv2DLayer(incoming = bn3a, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv3a.W, b = None,
                          nonlinearity = None)
@@ -209,7 +209,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn3b', nn.layers.get_output_shape(bn3b)
 
-    conv3c = Conv2DLayer(incoming = bn3b, num_filters = 128, filter_size = (1, 9),
+    conv3c = Conv2DLayer(incoming = bn3b, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv3a.W, b = None,
                          nonlinearity = None)
@@ -228,7 +228,7 @@ def build_model():
     drop3 = nn.layers.DropoutLayer(incoming = pool3, p = p3)
     print 'drop3', nn.layers.get_output_shape(drop3)
 
-    conv4 = Conv2DLayer(incoming = drop3, num_filters = 128, filter_size = (1, 1),
+    conv4 = Conv2DLayer(incoming = drop3, num_filters = 64, filter_size = (1, 1),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -238,7 +238,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn4', nn.layers.get_output_shape(bn4)
 
-    conv4a = Conv2DLayer(incoming = bn4, num_filters = 128, filter_size = (1, 9),
+    conv4a = Conv2DLayer(incoming = bn4, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = nn.init.Normal(std = std), b = None,
                          nonlinearity = None)
@@ -251,7 +251,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn4a', nn.layers.get_output_shape(bn4a)
 
-    conv4b = Conv2DLayer(incoming = bn4a, num_filters = 128, filter_size = (1, 9),
+    conv4b = Conv2DLayer(incoming = bn4a, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv4a.W, b = None,
                          nonlinearity = None)
@@ -264,7 +264,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn4b', nn.layers.get_output_shape(bn4b)
 
-    conv4c = Conv2DLayer(incoming = bn4b, num_filters = 128, filter_size = (1, 9),
+    conv4c = Conv2DLayer(incoming = bn4b, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv4a.W, b = None,
                          nonlinearity = None)
@@ -283,7 +283,7 @@ def build_model():
     drop4 = nn.layers.DropoutLayer(incoming = pool4, p = p4)
     print 'drop4', nn.layers.get_output_shape(drop4)
 
-    conv5 = Conv2DLayer(incoming = drop4, num_filters = 128, filter_size = (1, 1),
+    conv5 = Conv2DLayer(incoming = drop4, num_filters = 64, filter_size = (1, 1),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -293,7 +293,7 @@ def build_model():
                          nonlinearity = nn.nonlinearities.very_leaky_rectify)
     print 'bn5', nn.layers.get_output_shape(bn5)
 
-    conv5a = Conv2DLayer(incoming = bn5, num_filters = 128, filter_size = (1, 9),
+    conv5a = Conv2DLayer(incoming = bn5, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = nn.init.Normal(std = std), b = None,
                          nonlinearity = None)
@@ -306,7 +306,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn5a', nn.layers.get_output_shape(bn5a)
 
-    conv5b = Conv2DLayer(incoming = bn5a, num_filters = 128, filter_size = (1, 9),
+    conv5b = Conv2DLayer(incoming = bn5a, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv5a.W, b = None,
                          nonlinearity = None)
@@ -319,7 +319,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn5b', nn.layers.get_output_shape(bn5b)
 
-    conv5c = Conv2DLayer(incoming = bn5b, num_filters = 128, filter_size = (1, 9),
+    conv5c = Conv2DLayer(incoming = bn5b, num_filters = 64, filter_size = (1, 9),
                          stride = 1, border_mode = 'same',
                          W = conv5a.W, b = None,
                          nonlinearity = None)
@@ -332,7 +332,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn5c', nn.layers.get_output_shape(bn5c)
 
-    pool5 = Pool2DLayer(incoming = bn5c, pool_size = (1, 4), stride = (1, 4))
+    pool5 = Pool2DLayer(incoming = bn5c, pool_size = (1, 2), stride = (1, 2))
     print 'pool5', nn.layers.get_output_shape(pool5)
 
     l_out = nn.layers.DenseLayer(incoming = pool5, num_units = num_events,

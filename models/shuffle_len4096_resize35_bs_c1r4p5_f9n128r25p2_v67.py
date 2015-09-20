@@ -11,8 +11,8 @@ rs = T.shared_randomstreams.RandomStreams()
 rs.seed(int(time.time()))
 
 data_path = 'eeg_train.npy'
-train_series = [0, 1, 2, 3, 4, 5]
-valid_series = [6, 7]
+train_series = [5, 0, 7, 4, 3, 2]
+valid_series = [1, 6]
 test_series = [0, 1, 2, 3, 4, 5]
 events = [0, 1, 2, 3, 4, 5]
 num_events = len(events)
@@ -20,18 +20,22 @@ num_events = len(events)
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 3072,
+                     'length': 4096,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'num_chunks': 400,
-                     'pos_ratio': 0.35,
-                     'resize': [0.7, 1.3],
+                     'pos_ratio': 0.25,
+                     'bootstrap': True,
+                     'neg_pool_size': 81920,
+                     'hard_ratio': 1,
+                     'easy_mode': 'all',
+                     'resize': [0.65, 1.35],
                      }
 
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 3072,
+                     'length': 4096,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
@@ -41,7 +45,7 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 3072,
+                  'length': 4096,
                   'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
@@ -51,10 +55,10 @@ bs_data_params = {'section': 'bootstrap',
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 3072,
+                    'length': 4096,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [3072],
+                    'test_lens': [4096],
                     'test_valid': True,
                     }
 
@@ -64,7 +68,7 @@ momentum = 0.9
 wc = 0.001
 display_freq = 10
 valid_freq = 20
-bs_freq = 20000
+bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):
@@ -80,9 +84,9 @@ def lr_schedule(chunk_idx):
 
 std = 0.02
 p1 = 0
-p2 = 0.1
-p3 = 0.1
-p4 = 0.1
+p2 = 0.2
+p3 = 0.2
+p4 = 0.2
 
 metrics = [metrics.meanAccuracy, metrics.meanAUC]
 metric_names = ['mean accuracy', 'areas under the ROC curve']

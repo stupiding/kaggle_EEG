@@ -22,7 +22,7 @@ train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
                      'length': 4096,
-                     'preprocess': 'per_sample_mean_variance',
+                     'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'num_chunks': 400,
                      'pos_ratio': 0.35,
@@ -30,14 +30,14 @@ train_data_params = {'section': 'train',
                      'neg_pool_size': 81920,
                      'hard_ratio': 1,
                      'easy_mode': 'all',
-                     'resize': [0.7, 1.3],
+                     #'resize': [0.7, 1.3],
                      }
 
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
                      'length': 4096,
-                     'preprocess': 'per_sample_mean_variance',
+                     'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
                      'neg_interval': 100,
@@ -47,7 +47,7 @@ bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
                   'length': 4096,
-                  'preprocess': 'per_sample_mean_variance',
+                  'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
                   'neg_interval': 100,
@@ -57,7 +57,7 @@ test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
                     'length': 4096,
-                    'preprocess': 'per_sample_mean_variance',
+                    'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
                     'test_lens': [4096],
                     'test_valid': True,
@@ -85,7 +85,7 @@ def lr_schedule(chunk_idx):
 
 
 std = 0.02
-p = 0.1
+p = 0.2
 
 metrics = [metrics.meanAUC]
 metric_names = ['areas under the ROC curve']
@@ -100,10 +100,7 @@ input_dims = (batch_size,
 def build_model():
     l_in = nn.layers.InputLayer(input_dims)
 
-    pool0 = Pool2DLayer(incoming = l_in, pool_size = (1, 4), stride = (1, 4), mode = 'average')
-    print 'pool0', nn.layers.get_output_shape(pool0)
-
-    conv1 = Conv2DLayer(incoming = pool0, num_filters = 128, filter_size = (1, 9),
+    conv1 = Conv2DLayer(incoming = l_in, num_filters = 128, filter_size = (1, 9),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
                         nonlinearity = None)
@@ -212,7 +209,39 @@ def build_model():
     pool7 = Pool2DLayer(incoming = bn7, pool_size = (1, 2), stride = (1, 2))
     print 'pool7', nn.layers.get_output_shape(pool7)
 
-    l_out = nn.layers.DenseLayer(incoming = pool7, num_units = num_events,
+    drop7 = nn.layers.DropoutLayer(incoming = pool7, p = p)
+    print 'drop7', nn.layers.get_output_shape(drop7)
+
+    conv8 = Conv2DLayer(incoming = drop7, num_filters = 128, filter_size = (1, 9),
+                        stride = 1, border_mode = 'same',
+                        W = nn.init.Normal(std = std),
+                        nonlinearity = None)
+    print 'conv8', nn.layers.get_output_shape(conv8)
+
+    bn8 = BatchNormLayer(incoming = conv8, epsilon = 0.0000000001,
+                         nonlinearity = nn.nonlinearities.leaky_rectify)
+    print 'bn8', nn.layers.get_output_shape(bn8)
+
+    pool8 = Pool2DLayer(incoming = bn8, pool_size = (1, 2), stride = (1, 2))
+    print 'pool8', nn.layers.get_output_shape(pool8)
+
+    drop8 = nn.layers.DropoutLayer(incoming = pool8, p = p)
+    print 'drop8', nn.layers.get_output_shape(drop8)
+
+    conv9 = Conv2DLayer(incoming = drop8, num_filters = 128, filter_size = (1, 9),
+                        stride = 1, border_mode = 'same',
+                        W = nn.init.Normal(std = std),
+                        nonlinearity = None)
+    print 'conv9', nn.layers.get_output_shape(conv9)
+
+    bn9 = BatchNormLayer(incoming = conv9, epsilon = 0.0000000001,
+                         nonlinearity = nn.nonlinearities.leaky_rectify)
+    print 'bn9', nn.layers.get_output_shape(bn9)
+
+    pool9 = Pool2DLayer(incoming = bn9, pool_size = (1, 2), stride = (1, 2))
+    print 'pool9', nn.layers.get_output_shape(pool9)
+
+    l_out = nn.layers.DenseLayer(incoming = pool9, num_units = num_events,
                                  W = nn.init.Normal(std = std),
                                  nonlinearity = nn.nonlinearities.sigmoid)
     print 'l_out', nn.layers.get_output_shape(l_out)
