@@ -82,7 +82,6 @@ The code is written in Python, and the main dependencies include Lasagne, Numpy,
  
 2. Prepare the model files in the folder **models/**. Some models have been put into this folder. The name of the model file follows certain rules. For example, the model **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** means:
  1. **len3584**: the input has a length of 3584
-
  2. **resize3**: the resizing range (data augmentation) is 0.7 to 1.3
  3. **bs**: bootstrap is used
  4. **c1r4p5**: the model has 1 convolutional layer, 4 RCLs, and 5 pooling layers
