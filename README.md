@@ -74,7 +74,7 @@ For each time t, only the historical data is used as input. Zeros are padded in 
 
 #Code
 ##Code overview
-The code is written in Python, and the main dependencies include Lasagne, Numpy, Sklearn, Scipy and Skimage. Each model is run on a single Titan black GPU. Note that the code is **GPU-only** for the use of CUDNN.
+The code is written in Python (version 2.7.6), and the main dependencies include Lasagne (0.1.dev), Numpy, Sklearn, Scipy,  Skimage and Theano (0.7.0). Each model is run on a single Titan black GPU. Note that the code is **GPU-only** for the use of CUDNN.
 
 ##How to use the code
 
