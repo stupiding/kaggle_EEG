@@ -216,7 +216,7 @@ Model selection results for the 6 events may have some overlapping. To avoid tra
 14. **save_freq**: frequency to save models
 
 #Cross validation
-The 8 series are evenly split into 4 groups, indexed by 01, 23, 45 and 67. To change the validation set, you need to modify parameter **train_series** and **test_series** in model file. For example:    
+The 8 series are evenly split into 4 groups, indexed by 01, 23, 45 and 67. Only **v67** validation models are uploaded. To change the validation set, you need to modify parameter **train_series** and **test_series** in model file. For example:    
 xx_v01.py:    
 ```
   train_series = [2, 3, 4, 5, 6, 7]
