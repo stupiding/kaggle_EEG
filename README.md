@@ -90,8 +90,7 @@ The code is written in Python (version 2.7.6), and the main dependencies include
  7. **r35**: positive samples have a ratio of 0.35 over all inputs
  8. **v67**: this model uses fixed series split 01, 23, 45 for training, and 67 for validation. When the model name has no **vxx**, it means this model uses all 8 series for training and not validation. In our experiments, we used fixed CV splits, in which 01, 23, 45 and 67 were used as validation set, respectively.    
 
-**Note**: step 3 and step 4 can be skipped, and use our model selection results in **models/README.md**. And our **selection_result.npy** is ready in folder **model_selection**.
-
+**Note**: step 3 and step 4 can be skipped, and use our model selection results in **models/README.md**. And our **selection_result.npy** is ready in folder **model_selection**.    
 3. Train the models using **train_net.py** with the command below:
 **THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py name_of_your_model**     
 
