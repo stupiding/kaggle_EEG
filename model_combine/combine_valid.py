@@ -22,7 +22,7 @@ results = ['len3584_resize3_c1r4p5_f9n256r35p1', 'len4608_bs_c1r4p5_f9n128r35p2'
            'fake_shuffle_len3584_bs_c1r4p5_f9n192r35p2', 'len2048p1_resize3_bs_c1r4p5_f9n128r35p1',
            'len4096_downsample4_leaky_bs_c1r4p5_f9n128r35p2', 'fake_shuffle_len4096_downsample4_resize3_bs_c1r4p5_f9n128r35p2',
            'fake_shuffle_len4608_downsample4_bs_c1r4p5_f9n160r35p2', 'len4608_c9p9_f9n32_r35p1',
-           'len2048p4_resize3_c1r4p5_f9n256r35p1', 
+           'len2048p4_resize3_c1r4p5_f9n256r35p1', 'len4096_downsample8_leaky_bs_c1r4p5_f9n128r35p2',
           ]  # This is the list of models that have been trained
 
 combine_stride = 1
