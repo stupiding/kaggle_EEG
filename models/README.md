@@ -132,6 +132,7 @@ In our implementation, model selection is done for every single event. And for e
  22. fake_shuffle_len4096_downsample4_resize3_bs_c1r4p5_f9n128r35p2
 
 Model selection results for the 6 events may have some overlapping. To avoid training the same model repeatedly, the union list are as follows:
+
 1. len3584_resize3_c1r4p5_f9n256r35p1
 2. len4608_bs_c1r4p5_f9n128r35p2
 3. len2048p4_resize3_bs_c1r4p5_f9n256r35p1
