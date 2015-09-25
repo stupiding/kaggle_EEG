@@ -11,32 +11,31 @@ rs = T.shared_randomstreams.RandomStreams()
 rs.seed(int(time.time()))
 
 data_path = 'eeg_train.npy'
-train_series = [6, 5, 3, 0, 7, 2]
-valid_series = [4, 1]
-test_series = [0, 1, 2, 3, 4, 5]
+train_series = [4, 6, 0, 7, 1, 2, 5, 3]
+valid_series = []
+test_series = [0]
 events = [0, 1, 2, 3, 4, 5]
 num_events = len(events)
-valid_first = True
 
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2048,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
-                     'num_chunks': 280,
+                     'num_chunks': 400,
                      'pos_ratio': 0.35,
                      'bootstrap': True,
                      'neg_pool_size': 81920,
                      'hard_ratio': 1,
                      'easy_mode': 'all',
-                     'resize': [0.7, 1.3],
+                     'resize': [0.65, 1.35],
                      }
 
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 2048,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
@@ -46,7 +45,7 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 2048,
+                  'length': 3584,
                   'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
@@ -56,23 +55,21 @@ bs_data_params = {'section': 'bootstrap',
 test_valid_params = {'section': 'valid',
                     'chunk_gen_fun': 'test_valid_chunk_gen_fun',
                     'channels': 32,
-                    'length': 2048,
+                    'length': 3584,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [2048],
-                    'interval': 10, 
-                    'test_valid': True,
+                    'test_lens': [3584],
+                    'interval': 10,
                     }
 
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 2048,
+                    'length': 3584,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [2048],
-                    'interval': 10, 
-                    'test_valid': True,
+                    'test_lens': [3584],
+                    'test_valid': False,
                     }
 
 
@@ -80,23 +77,23 @@ batch_size = 64
 momentum = 0.9
 wc = 0.001
 display_freq = 10
-valid_freq = 20
-bs_freq = 20000
+valid_freq = 20000
+bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):
     base = 0.1
-    if chunk_idx < 160:
+    if chunk_idx < 200:
         return base
-    elif chunk_idx < 240:
+    elif chunk_idx < 320:
         return 0.1 * base
-    elif chunk_idx < 280:
+    elif chunk_idx < 390:
         return 0.01 * base
     else:
         return 0.001 * base
 
 std = 0.02
-p1 = 0
+p1 = 0.1
 p2 = 0.1
 p3 = 0.1
 p4 = 0.1
@@ -290,7 +287,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn4c', nn.layers.get_output_shape(bn4c)
 
-    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 2), stride = (1, 2))
+    pool4 = Pool2DLayer(incoming = bn4c, pool_size = (1, 4), stride = (1, 4))
     print 'pool4', nn.layers.get_output_shape(pool4)
 
     drop4 = nn.layers.DropoutLayer(incoming = pool4, p = p4)
@@ -345,7 +342,7 @@ def build_model():
                           nonlinearity = nn.nonlinearities.rectify)    
     print 'bn5c', nn.layers.get_output_shape(bn5c)
 
-    pool5 = Pool2DLayer(incoming = bn5c, pool_size = (1, 4), stride = (1, 4))
+    pool5 = Pool2DLayer(incoming = bn5c, pool_size = (1, 2), stride = (1, 2))
     print 'pool5', nn.layers.get_output_shape(pool5)
 
     l_out = nn.layers.DenseLayer(incoming = pool5, num_units = num_events,

@@ -1,4 +1,5 @@
 import numpy as np
+import numpy as np
 import theano
 import theano.tensor as T
 import lasagne as nn
@@ -11,8 +12,8 @@ rs = T.shared_randomstreams.RandomStreams()
 rs.seed(int(time.time()))
 
 data_path = 'eeg_train.npy'
-train_series = [0, 1, 2, 3, 4, 5]
-valid_series = [6, 7]
+train_series = [0, 1, 2, 3, 4, 5, 6, 7]
+valid_series = []
 test_series = [0, 1, 2, 3, 4, 5]
 events = [0, 1, 2, 3, 4, 5]
 num_events = len(events)
@@ -20,7 +21,7 @@ num_events = len(events)
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 4096,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'num_chunks': 400,
@@ -35,7 +36,7 @@ train_data_params = {'section': 'train',
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 4096,
+                     'length': 3584,
                      'preprocess': 'per_sample_mean',
                      'chunk_size': 4096,
                      'pos_interval': 100,
@@ -45,7 +46,7 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 4096,
+                  'length': 3584,
                   'preprocess': 'per_sample_mean',
                   'chunk_size': 4096,
                   'pos_interval': 100,
@@ -55,21 +56,21 @@ bs_data_params = {'section': 'bootstrap',
 test_valid_params = {'section': 'valid',
                     'chunk_gen_fun': 'test_valid_chunk_gen_fun',
                     'channels': 32,
-                    'length': 4096,
+                    'length': 3584,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [4096],
+                    'test_lens': [3584],
                     'interval': 10,
                     }
 
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 4096,
+                    'length': 3584,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [4096],
-                    'test_valid': True,
+                    'test_lens': [3584],
+                    'test_valid': False,
                     }
 
 
@@ -77,8 +78,8 @@ batch_size = 64
 momentum = 0.9
 wc = 0.001
 display_freq = 10
-valid_freq = 20
-bs_freq = 20000
+valid_freq = 20000
+bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):

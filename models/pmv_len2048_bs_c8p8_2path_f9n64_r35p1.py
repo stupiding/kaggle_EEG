@@ -1,4 +1,5 @@
 import numpy as np
+import numpy as np
 import theano
 import theano.tensor as T
 import lasagne as nn
@@ -11,8 +12,8 @@ rs = T.shared_randomstreams.RandomStreams()
 rs.seed(int(time.time()))
 
 data_path = 'eeg_train.npy'
-train_series = [0, 1, 2, 3, 4, 5]
-valid_series = [6, 7]
+train_series = [0, 1, 2, 3, 4, 5, 6, 7]
+valid_series = []
 test_series = [0, 1, 2, 3, 4, 5]
 events = [0, 1, 2, 3, 4, 5]
 num_events = len(events)
@@ -20,8 +21,8 @@ num_events = len(events)
 train_data_params = {'section': 'train',
                      'chunk_gen_fun': 'random_chunk_gen_fun',
                      'channels': 32,
-                     'length': 4096,
-                     'preprocess': 'per_sample_mean',
+                     'length': 2048,
+                     'preprocess': 'per_sample_mean_variance',
                      'chunk_size': 4096,
                      'num_chunks': 400,
                      'pos_ratio': 0.35,
@@ -35,8 +36,8 @@ train_data_params = {'section': 'train',
 valid_data_params = {'section': 'valid',
                      'chunk_gen_fun': 'fixed_chunk_gen_fun',
                      'channels': 32,
-                     'length': 4096,
-                     'preprocess': 'per_sample_mean',
+                     'length': 2048,
+                     'preprocess': 'per_sample_mean_variance',
                      'chunk_size': 4096,
                      'pos_interval': 100,
                      'neg_interval': 100,
@@ -45,8 +46,8 @@ valid_data_params = {'section': 'valid',
 bs_data_params = {'section': 'bootstrap',
                   'chunk_gen_fun': 'fixed_chunk_gen_fun',
                   'channels': 32,
-                  'length': 4096,
-                  'preprocess': 'per_sample_mean',
+                  'length': 2048,
+                  'preprocess': 'per_sample_mean_variance',
                   'chunk_size': 4096,
                   'pos_interval': 100,
                   'neg_interval': 100,
@@ -55,21 +56,21 @@ bs_data_params = {'section': 'bootstrap',
 test_valid_params = {'section': 'valid',
                     'chunk_gen_fun': 'test_valid_chunk_gen_fun',
                     'channels': 32,
-                    'length': 4096,
+                    'length': 2048,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [4096],
+                    'test_lens': [2048],
                     'interval': 10,
                     }
 
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
-                    'length': 4096,
-                    'preprocess': 'per_sample_mean',
+                    'length': 2048,
+                    'preprocess': 'per_sample_mean_variance',
                     'chunk_size': 4096,
-                    'test_lens': [4096],
-                    'test_valid': True,
+                    'test_lens': [2048],
+                    'test_valid': False,
                     }
 
 
@@ -77,8 +78,8 @@ batch_size = 64
 momentum = 0.9
 wc = 0.001
 display_freq = 10
-valid_freq = 20
-bs_freq = 20000
+valid_freq = 20000
+bs_freq = 20
 save_freq = 20
 
 def lr_schedule(chunk_idx):
@@ -94,7 +95,7 @@ def lr_schedule(chunk_idx):
 
 
 std = 0.02
-p = 0.2
+p = 0.1
 
 metrics = [metrics.meanAUC]
 metric_names = ['areas under the ROC curve']
@@ -205,6 +206,12 @@ def build_model():
     drop6 = nn.layers.DropoutLayer(incoming = pool6, p = p)
     print 'drop6', nn.layers.get_output_shape(drop6)
 
+    pool6_large = Pool2DLayer(incoming = bn6, pool_size = (1, 8), stride = (1, 8))
+    print 'pool6_large', nn.layers.get_output_shape(pool6_large)
+
+    drop6_large = nn.layers.DropoutLayer(incoming = pool6_large, p = p)
+    print 'drop6_large', nn.layers.get_output_shape(drop6_large)
+
     conv7 = Conv2DLayer(incoming = drop6, num_filters = 64, filter_size = (1, 9),
                         stride = 1, border_mode = 'same',
                         W = nn.init.Normal(std = std),
@@ -234,23 +241,12 @@ def build_model():
     pool8 = Pool2DLayer(incoming = bn8, pool_size = (1, 2), stride = (1, 2))
     print 'pool8', nn.layers.get_output_shape(pool8)
 
-    drop8 = nn.layers.DropoutLayer(incoming = pool8, p = p)
-    print 'drop8', nn.layers.get_output_shape(drop8)
+    pool6F = nn.layers.FlattenLayer(incoming = drop6_large, outdim = 2)
+    pool8F = nn.layers.FlattenLayer(incoming = pool8, outdim = 2)
+    concat = nn.layers.ConcatLayer(incomings=[pool6F,pool8F],axis=1)
+    print 'concat', nn.layers.get_output_shape(concat)
 
-    conv9 = Conv2DLayer(incoming = drop8, num_filters = 64, filter_size = (1, 9),
-                        stride = 1, border_mode = 'same',
-                        W = nn.init.Normal(std = std),
-                        nonlinearity = None)
-    print 'conv9', nn.layers.get_output_shape(conv9)
-
-    bn9 = BatchNormLayer(incoming = conv9, epsilon = 0.0000000001,
-                         nonlinearity = nn.nonlinearities.leaky_rectify)
-    print 'bn9', nn.layers.get_output_shape(bn9)
-
-    pool9 = Pool2DLayer(incoming = bn9, pool_size = (1, 2), stride = (1, 2))
-    print 'pool9', nn.layers.get_output_shape(pool9)
-
-    l_out = nn.layers.DenseLayer(incoming = pool9, num_units = num_events,
+    l_out = nn.layers.DenseLayer(incoming = concat, num_units = num_events,
                                  W = nn.init.Normal(std = std),
                                  nonlinearity = nn.nonlinearities.sigmoid)
     print 'l_out', nn.layers.get_output_shape(l_out)
