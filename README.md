@@ -81,7 +81,7 @@ Note: there are 5 steps to use the code. Step 1 and step 2 are preparations that
 
 1. Generate the eeg_train.npy and eeg_test.npy with read_data.py
  
-2. Prepare the model files in the folder **models/** according to **models/README.md**. Some models (only validation v67 model file and the non-cross-validation model file for each network structure)  have been put into this folder. The name of the model file follows certain rules. For example, the model **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** means:
+2. Prepare the model files in the folder **models/** according to **models/README.md**. Some models (**only validation v67 model file and the non-cross-validation model file for each network structure**)  have been put into this folder. The name of the model file follows certain rules. For example, the model **len3584_resize3_bs_c1r4p5_f9n256r35p1_v67.py** means:
  1. **len3584**: the input has a length of 3584
  2. **resize3**: the resizing range (data augmentation) is 0.7 to 1.3
  3. **bs**: bootstrap is used
