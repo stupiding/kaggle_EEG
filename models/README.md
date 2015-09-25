@@ -17,6 +17,7 @@ In our implementation, model selection is done for every single event. And for e
  14. fake_shuffle_len3584_downsample2_bs_c1r4p5_f9n192r35p2
  15. fake_shuffle_len4096_resize2_bs_c1r4p5_f9n128r25p2
  16. len2048p4_resize3_c1r4p5_f9n256r35p1
+
 2. event 2
  1. len3584_resize3_bs_c1r4p5_f9n128r35p1
  2. len4608_bs_c1r4p5_f9n128r35p2
@@ -35,6 +36,7 @@ In our implementation, model selection is done for every single event. And for e
  15. fake_shuffle_len4096_bs_c1r4p5_f9n128r35p2
  16. len2048p4_resize3_bs_c1r4p5_f9n256r35p1
  17. len2048_resize3_bs_c8p8_f9n256_r35p1
+
 3. event 3
  1. resize3_c1r4p5_f9n128r35p1
  2. len4608_bs_c1r4p5_f9n128r35p2
@@ -56,6 +58,7 @@ In our implementation, model selection is done for every single event. And for e
  18. fake_shuffle_len4096_bs_c1r4p5_f9n128r35p2
  19. len3584_resize3_bs_c1r4p5_f9n256r35p1
  20. fake_shuffle_op_len4096_downsample2_bs_c1r4p5_f9n160r35p2
+
 4. event 4
  1. resize3_c1r4p5_f9n128r35p1
  2. len2048p1_resize3_bs_c1r4p5_f9n256r35p1
@@ -79,6 +82,7 @@ In our implementation, model selection is done for every single event. And for e
  20. fake_shuffle_len3584_bs_c1r4p5_f9n192r35p2
  21. len2048p1_resize3_bs_c1r4p5_f9n128r35p1
  22. len4096_downsample8_leaky_bs_c1r4p5_f9n128r35p2
+
 5. event 5
  1. len3584_resize3_bs_c1r4p5_f9n256r35p1
  2. len4096_downsample4_bs_c1r4p5_f9n128r35p2
@@ -102,6 +106,7 @@ In our implementation, model selection is done for every single event. And for e
  20. len2048p1_resize3_bs_c1r4p5_f9n256r35p1
  21. len4096_downsample4_resize3_bs_c7p7_f9n128_r35p1
  22. fake_shuffle_op_len4096_downsample2_bs_c1r4p5_f9n160r35p2
+
 6. event 6
  1. len3584_resize3_bs_c1r4p5_f9n256r35p1
  2. len4096_downsample4_bs_c1r4p5_f9n128r35p2
