@@ -89,10 +89,11 @@ Note: there are 5 steps to use the code. Step 1 and step 2 are preparations that
  5. **f9**: the size of recurrent filters is 1×9
  6. **n256**: 256 filters are used for convolutional layer and RCLs
  7. **r35**: positive samples have a ratio of 0.35 over all inputs
- 8. **v67**: the 8 series are evenly split into 4 groups, indexed by 01, 23, 45 and 67. This model uses series split 01, 23, 45 for training, and 67 for validation. When the model name has no **vxx**, it means this model uses all 8 series for training and no validation. In our experiments, we used fixed CV splits, in which 01, 23, 45 and 67 were used as validation set, respectively.    
+ 8. **v67**: the 8 series are evenly split into 4 groups, indexed by 01, 23, 45 and 67. This model uses series split 01, 23, 45 for training, and 67 for validation. To change the validation set, you need to switch the required split in parameter **train_series** of model file with **test_series**. When the model name has no **vxx**, it means this model uses all 8 series for training and no validation. In our experiments, we used fixed CV splits, in which 01, 23, 45 and 67 were used as validation set, respectively.    
 
 3. Train the models using **train_net.py** with the command below:
 **THEANO_FLAGS=device=gpu0,floatX=float32 python train_net.py name_of_your_model**     
+This commmand will only process one validation at a time. To do cross validation, you need to execute the command for every validation set, namely **xx_v01**, **xx_v23**, **xx_v45** and **xx_v67**.  
 
 4. Over the validation results, use GFS to select a subset of models with the following steps:
  1. change into folder **model_combine/**
