@@ -214,3 +214,6 @@ Model selection results for the 6 events may have some overlapping. To avoid tra
 12. **valid_freq**: frequency to test the validation set
 13. **bs_freq**: frequency to do bootstrap (to stop bootstap, this parameter should set with a number larger than **tarin_data_params**'s **num_chunks**)
 14. **save_freq**: frequency to save models
+
+#Cross validation
+The 8 series are evenly split into 4 groups, indexed by 01, 23, 45 and 67. To change the validation set, you need to switch the required split in parameter **train_series**  in model file with **test_series**. In our experiments, we used fixed CV splits, in which 01, 23, 45 and 67 were used as validation set, respectively.
