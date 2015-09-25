@@ -53,6 +53,16 @@ bs_data_params = {'section': 'bootstrap',
                   'neg_interval': 100,
                   }
 
+test_valid_params = {'section': 'valid',
+                    'chunk_gen_fun': 'test_valid_chunk_gen_fun',
+                    'channels': 32,
+                    'length': 3584,
+                    'preprocess': 'per_sample_mean',
+                    'chunk_size': 4096,
+                    'test_lens': [3584],
+                    'interval': 10,
+                    }
+
 test_data_params = {'section': 'test',
                     'chunk_gen_fun': 'sequence_chunk_gen_fun',
                     'channels': 32,
