@@ -68,7 +68,7 @@ test_data_params = {'section': 'test',
                     'length': 3072,
                     'preprocess': 'per_sample_mean',
                     'chunk_size': 4096,
-                    'test_lens': [2458, 3072, 3686],
+                    'test_lens': [3072],
                     'test_valid': True,
                     }
 
