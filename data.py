@@ -72,12 +72,10 @@ def bootstrap(y_true, probs):
 
     if easy_mode == 'random':
         easy_idcs = bootstrap_idcs[neg_idcs[nr.randint(0, len(neg_idcs), (easy_size,))]]
-    elif easy_mode == 'keep_easy':
+    elif easy_mode == 'easy':
         easy_idcs = neg_pool[:easy_size]
-    elif easy_mode == 'keep_all':
-        easy_idcs = neg_pool[nr.randint(0, len(neg_pool), (easy_size,))]
     elif easy_mode == 'all':
-        easy_idcs = neg_pool[:easy_size]
+        easy_idcs = neg_pool[nr.randint(0, len(neg_pool), (easy_size,))]
     else:
         sys.exit('Wrong easy mode')
 

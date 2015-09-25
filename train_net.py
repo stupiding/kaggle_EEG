@@ -112,6 +112,16 @@ bs_data_gen = lambda: data_.chunk_gen(
 
 
 ##########################################################################################
+do_validation = True
+if 'test_valid' in model.test_data_params and model.test_data_params['test_valid'] == True:
+    do_validation = True
+else:
+    do_validation = False
+
+valid_result_folder = 'model_combine/all_valid_results/'
+test_result_folder = 'model_combine/all_test_results/'
+
+##########################################################################################
 # start training
 very_start = time.time()
 for chunk_idx, (x_chunk, y_chunk, _) in izip(chunk_idcs, train_data_gen()):
@@ -160,7 +170,7 @@ for chunk_idx, (x_chunk, y_chunk, _) in izip(chunk_idcs, train_data_gen()):
         preds_train = np.zeros((0, model.num_events), 'float32')
         y_train = np.zeros((0, model.num_events), 'int32')
 
-    if ((chunk_idx + 1) % model.valid_freq) == 0:
+    if ((chunk_idx + 1) % model.valid_freq) == 0 and do_validation is True:
         print
         print "Evaluating valid set"
         start_time = time.time()
@@ -268,7 +278,7 @@ if 'test_valid' in model.test_data_params and model.test_data_params['test_valid
         t2 = time.time()
         idx += 1
     save_valid_name = model_name[:-2] + str(model.valid_series[0]) + str(model.valid_series[1])
-    save_path = os.path.join(resume_path, 'test_valid_' + save_valid_name + '.npy')
+    save_path = os.path.join(valid_result_folder, 'test_valid_' + save_valid_name + '.npy')
     np.save(save_path, [y_test, preds_test])
     end_time = time.time()
     print "  elapsed time is %f seconds" % (end_time - start_time)
@@ -304,7 +314,7 @@ if ((not model.test_data_params.has_key('test')) or model.test_data_params['test
         t2 = time.time()
         idx += 1
     
-    save_path = os.path.join(resume_path, 'test_' + model_name + '.npy')
+    save_path = os.path.join(test_result_folder, 'test_' + model_name + '.npy')
     np.save(save_path, [y_test, preds_test])
 
 end_time = time.time()
