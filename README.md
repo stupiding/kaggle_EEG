@@ -42,17 +42,17 @@ The structure of a typical RCNN is given below:
 
 | Layer type      | Size                                                        | Output shape       |
 | --------------- |:-----------------------------------------------------------:| ------------------ |
-| Convolutional   | 128 1×9 filters                                             | (64, 128, 1, 3584) |
-| Max pooling     | Pool size 4, stride 4                                       | (64, 128, 1, 896)  |
-| RCL             | 128 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 128, 1, 896)  |
-| Max pooling     | Pool size 4, stride 4                                       | (64, 128, 1, 224)  |
-| RCL             | 128 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 128, 1, 224)  |
-| Max pooling     | Pool size 4, stride 4                                       | (64, 128, 1, 56)   |
-| RCL             | 128 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 128, 1, 56)   |
-| Max pooling     | Pool size 4, stride 4                                       | (64, 128, 1, 14)   |
-| RCL             | 128 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 128, 1, 14)   |
-| Max pooling     | Pool size 2, stride 2                                       | (64, 128, 1, 7)    |
-| Fully connected | 896×6                                                       | (64, 6)            |
+| Convolutional   | 256 1×9 filters                                             | (64, 256, 1, 3584) |
+| Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 896)  |
+| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 896)  |
+| Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 224)  |
+| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 224)  |
+| Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 56)   |
+| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 56)   |
+| Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 14)   |
+| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 14)   |
+| Max pooling     | Pool size 2, stride 2                                       | (64, 256, 1, 7)    |
+| Fully connected | 1792×6                                                      | (64, 6)            |
 
 This net is composed of one convolutional layer (for speed) and four RCLs, and all these layers are followed by a max pooling layer. Relu or leaky Relu activation is used in the convolutional layer and RCLs, and sigmoid activation is used in the fully connected layer for classification. The loss is the average of six binary cross entropy functions, corresponding to the six events.
 
