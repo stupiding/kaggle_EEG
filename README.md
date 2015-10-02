@@ -1,13 +1,9 @@
 This project provides the solution of team daheimao for the Kaggle Grasp-and-Lift EEG Detection Competition. It is implemented using Python and mainly based on [Lasagne](http://lasagne.readthedocs.org/en/latest/). Many thanks to its authors.
 
-This introduction is written by @daheimao.
-
 #Overview
-Before going to our solution, I want to mention the contribution of my team mate @stupiding. We prepared and completed this competition together. But unfortunately we missed the team merging deadline, for we are both new to kaggle and not familiar with the rules.
+I am a Ph.D student majored in neural networks and computer vision. My intention of participating in this competition is to evaluate the performance of recurrent convolutional neural network (RCNN) in processing time series data. RCNN is firstly proposed by I for image classification ([CVPR 2015](http://www.xlhu.cn/papers/Liang15-cvpr.pdf)), and then used for scene labeling (will appear in [NIPS 2015](https://nips.cc/Conferences/2015/AcceptedPapers) soon). In these two tasks input data is static image, and RCNN performs well. It turns out that RCNN also performs well for EEG data. Without any domain knowledge related modification, the best single model achieves 0.97652/0.97661 public/private LB scores. 
 
-We are graduate students majored in neural networks and computer vision. My intention of participating in this competition is to evaluate the performance of recurrent convolutional neural network (RCNN) in processing time series data. RCNN is firstly proposed by I for image classification ([CVPR 2015](http://www.xlhu.cn/papers/Liang15-cvpr.pdf)), and then used for scene labeling (will appear in [NIPS 2015](https://nips.cc/Conferences/2015/AcceptedPapers) soon). In these two tasks input data is static image, and RCNN performs well. It turns out that RCNN also performs well for EEG data. Without any domain knowledge related modification, our best single model achieves 0.97652/0.97661 public/private LB scores. 
-
-The pipeline of our solution is simple:
+The pipeline of the solution is simple:
 
 1. A set of candidate models (mostly RCNN) are trained in a 4-fold cross validation (CV) manner over the training set.
 
@@ -58,26 +54,26 @@ This net is composed of one convolutional layer (for speed) and four RCLs, and a
 
 Weight decay, dropout and batch normalization are used to regularize the model. For some models, data augmentation is also used: variable-length inputs are cropped and resized to a fixed length.
 
-We also tried CNN, and the best CNN model achieves 0.97136/0.97297 public/priviate LB scores, which are significantly lower than those of the RCNN models.
+I also tried CNN, and the best CNN model achieves 0.97136/0.97297 public/priviate LB scores, which are significantly lower than those of the RCNN models.
 
 #Model ensemble
 A set of candidate models are trained in 4-fold cross validation manner, and then GFS is used to select an optimal subset.  Thus for each model its predictions over all the training data can be obtained by concatenating the validation results of all 4 CV splits. The models are combined in an average manner, that is, the predicted probabilities of different models are simply averaged to obtain the final prediction.
 
 Initially, the selected subset is empty. In the first trial of GFS, the model with the highest AUC is selected and moved into the selected subset. In each of the following trials, the model which brings the largest AUC improvement when moved into the selected subset is chosen. GFS stops when the AUC stops improving. GFS is used for each event, so six subsets are selected.
 
-GFS works well and its result keeps good consistency with the LB score. Unfortunately, this consistency is destroyed by a mistake. At first, we use fixed cv splits for all models. When there are three days before the deadline, we found some models are wrongly trained and decide to run a set of new models. To increase the variation of the new models,random cv splits are used for the new models. After this change, the LB scores always decrease with more new models. We did not found the answer until the last submission is made. By using random cv split, some models which do not complement each other may become “complementary” because they are trained by different splits, which means different training data.
+GFS works well and its result keeps good consistency with the LB score. Unfortunately, this consistency is destroyed by a mistake. At first, I use fixed cv splits for all models. When there are three days before the deadline, I found some models are wrongly trained and decide to run a set of new models. To increase the variation of the new models,random cv splits are used for the new models. After this change, the LB scores always decrease with more new models. I did not found the answer until the last submission is made. By using random cv split, some models which do not complement each other may become “complementary” because they are trained by different splits, which means different training data.
 
 The six subsets of the final submission contains 36 models in total, and achieves 0.98049/0.98029 public/private LB scores.
 
 # No future data
-For each time t, only the historical data is used as input. Zeros are padded in the left when the data has not enough length. Because no filtering pre-processing is used, it is easy for our models to statisfy the rule of no future data.
+For each time t, only the historical data is used as input. Zeros are padded in the left when the data has not enough length. Because no filtering pre-processing is used, it is easy for the models to statisfy the rule of no future data.
 
 #Code
 ##Code overview
 The code is written in Python (version 2.7.6), and the main dependencies include Lasagne (0.1.dev), Numpy, Sklearn, Scipy,  Skimage and Theano (0.7.0). Each model is run on a single Titan black GPU. Note that the code is **GPU-only** for the use of CUDNN.
 
 ##How to use the code
-Note: there are 5 steps to use the code. Step 1 and step 2 are preparations that one needs to do before training the models. And step 3 and step 4 are used to generate cross-validation results and then do model selection. They are time-consuming and can be skipped. We have prepared the result of model selection. (The file **selection_result.npy** in folder **model_selection/**. After step 5, the **selection_result.npy** can be directly used by **make_submission.py** to generate the submission. The list of selected model names can be found in models/README.md)
+Note: there are 5 steps to use the code. Step 1 and step 2 are preparations that one needs to do before training the models. And step 3 and step 4 are used to generate cross-validation results and then do model selection. They are time-consuming and can be skipped. I have prepared the result of model selection. (The file **selection_result.npy** in folder **model_selection/**. After step 5, the **selection_result.npy** can be directly used by **make_submission.py** to generate the submission. The list of selected model names can be found in models/README.md)
 
 1. Generate the eeg_train.npy and eeg_test.npy with read_data.py
  
@@ -111,4 +107,4 @@ This commmand will only process one validation at a time. To do cross validation
   
 
 #Acknowledgements
-To summarize, this competition is very exciting although we made some mistakes. We want to give thanks to the organizers and all the other teams!
+To summarize, this competition is very exciting although I made some mistakes. I want to give thanks to the organizers and all the other teams!
