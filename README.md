@@ -44,13 +44,13 @@ The structure of a typical RCNN is given below:
 | --------------- |:-----------------------------------------------------------:| ------------------ |
 | Convolutional   | 256 1×9 filters                                             | (64, 256, 1, 3584) |
 | Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 896)  |
-| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 896)  |
+| RCL             | 256 1×1 feed-forward filters, 256 1×9 filters, 3 iterations | (64, 256, 1, 896)  |
 | Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 224)  |
-| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 224)  |
+| RCL             | 256 1×1 feed-forward filters, 256 1×9 filters, 3 iterations | (64, 256, 1, 224)  |
 | Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 56)   |
-| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 56)   |
+| RCL             | 256 1×1 feed-forward filters, 256 1×9 filters, 3 iterations | (64, 256, 1, 56)   |
 | Max pooling     | Pool size 4, stride 4                                       | (64, 256, 1, 14)   |
-| RCL             | 256 1×1 feed-forward filters, 128 1×9 filters, 3 iterations | (64, 256, 1, 14)   |
+| RCL             | 256 1×1 feed-forward filters, 256 1×9 filters, 3 iterations | (64, 256, 1, 14)   |
 | Max pooling     | Pool size 2, stride 2                                       | (64, 256, 1, 7)    |
 | Fully connected | 1792×6                                                      | (64, 6)            |
 
