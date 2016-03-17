@@ -43,7 +43,7 @@ for sub in np.arange(n_subs):
     sub_data = []
     sub_label = []
     for series in np.arange(9, 9 + n_series):
-        csv = 'subj' + str(sub + 1) + '_series' + str(series + 1) + '_data.csv'
+        csv = 'subj' + str(sub + 1) + '_series' + str(series) + '_data.csv'
         series_data = pd.read_csv(os.path.join(csvdir, csv))
         ch_names = list(series_data.columns[1:])
         series_data = np.array(series_data[ch_names], 'float32')
